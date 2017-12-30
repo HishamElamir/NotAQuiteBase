@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Testing Storge | Not Working</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+
+    <script src="../Source/Storage.js"></script>
+    <script type="text/javascript">
+        //  DataBase Created
+        var database = new BasicStorage({
+            id: {type: 'number', attr: 'auto-increment', key: 'primary'},
+            name: {type: 'string', default: 'No Name'},
+            age: {type: 'number', Null: false},
+            email: {type: 'string', Null: false}
+        });
+        
+        var insertion = function () {
+            var name = document.getElementById("name").value;
+            var age = document.getElementById("age").value;
+            var email = document.getElementById("email").value;
+            a = database.Insert({
+                name: name,
+                age: Number.isInteger(Number(age)) ? Number(age) : age,
+                email: email
+            });
+            
+            if (a === true) {
+                updateTable();
+            }
+        };
+
+        var updateTable = function () {
+            var data = database.SelectAll();
+            console.log(data);
+
+            var table = document.getElementById("tableUpdateContent");
+            while (table.firstChild) {
+                table.removeChild(table.firstChild);
+            }
+
+            for (var i = 0; i < data.length; i++) {
+                var ith = document.createElement('tr');
+
+                var id = document.createElement('th');
+                var name = document.createElement('th');
+                var email = document.createElement('th');
+                var age = document.createElement('th');
+
+                id.innerHTML = data[i]['id'];
+                name.innerHTML = data[i]['name'];
+                email.innerHTML = data[i]['email'];
+                age.innerHTML = data[i]['age'];
+
+                ith.appendChild(id);
+                ith.appendChild(name);
+                ith.appendChild(email);
+                ith.appendChild(age);
+                table.appendChild(ith);
+
+                selectInput();
+            }
+        };
+        var selectInput = function () {
+            document.getElementById('name').focus();
+            document.getElementById('name').select();
+        };
+    </script>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- Table -->
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Age</th>
+                    <th scope="col">Email</th>
+                </tr>
+            </thead>
+            <tbody id="tableUpdateContent">
+
+            </tbody>
+        </table>
+
+        <!-- Form -->
+        <form name="valform" action="" method="POST">
+            <div class="form-group">
+                <label for="exampleInputEmail1">Name</label>
+                <input type="text" class="form-control" id="name" aria-describedby="nameHelp" placeholder="Enter name">
+                <small id="nameHelp" class="form-text text-muted">the name you will use will appeare in your profile.</small>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Email address</label>
+                <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Password</label>
+                <input type="age" class="form-control" id="age" placeholder="Age">
+            </div>
+            <input class="btn btn-primary" type="button" name="submit" value="Add" onclick="insertion();"/>
+        </form>
+    </div>
+    
+</body>
+</html>
